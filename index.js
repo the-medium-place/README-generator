@@ -8,8 +8,7 @@ const util = require("util");
 const writeFileAsync = util.promisify(fs.writeFile);
 const appendFileAsync = util.promisify(fs.appendFile);
 
-require('dotenv').config();
-
+//  array of questions (objects)
 const questions = [
     {
         type: "input",
@@ -52,8 +51,6 @@ const questions = [
         name: "tests"
     }
 ]
-
-const GITHUB_KEY = process.env.GITHUB_KEY;
 
 // ask for user info
 inquirer.prompt(questions).then(response => {
@@ -108,7 +105,7 @@ inquirer.prompt(questions).then(response => {
         .then(appendFileAsync("READMEtest.md", `## Usage: \n${usage}\n\n`))
         .then(appendFileAsync("READMEtest.md", `## Tests: \n${tests}\n\n`))
         .then(apiCall())
-        .catch(err => !err ? console.log("success!!") : console.log(err));
+        .catch(err => console.log(err));
 
 
 

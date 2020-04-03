@@ -1,29 +1,29 @@
-# title
+# TITLE
  
 ## License: 
-![License: n](https://img.shields.io/badge/License-n-green.svg) 
+![License: MIT](https://img.shields.io/badge/License-MIT-green.svg) 
  
 ## Description: 
-desc 
+short description of project 
  
 ## Installation: 
-n 
+node installation instructions 
  
+## Contributing: 
+[![Contributor Covenant](https://img.shields.io/badge/Contributor%20Covenant-v2.0%20adopted-ff69b4.svg)](https://www.contributor-covenant.org/version/2/0/code_of_conduct/)
+
+## Usage: 
+project usage instructions
+
+## Tests: 
+testing instructions
+
 ## Table of Contents
 * [Installation](#installation)
 * [Usage](#usage)
 * [Contributing](#contributing)
 * [Testing](#tests)
 * [Questions](#questions)
-
-## Contributing: 
-[![Contributor Covenant](https://img.shields.io/badge/Contributor%20Covenant-v2.0%20adopted-ff69b4.svg)](https://www.contributor-covenant.org/version/2/0/code_of_conduct/)
-
-## Usage: 
-n
-
-## Tests: 
-n
 
 ## Questions: 
 * the-medium-place
