@@ -1,33 +1,22 @@
-# title tes
- 
-## License: 
-![License: MIT](https://img.shields.io/badge/License-MIT-green.svg) 
+# README Generator
  
 ## Description: 
-n 
+A command-line application that dynamically generates a README.md from a user's input. The generated file includes a licensing badge and an optional Contributor Covenant badge. 
  
-## Table of Contents
-* [Installation](#installation)
-* [Usage](#usage)
-* [Contributing](#contributing)
-* [Testing](#tests)
-* [Questions](#questions)
+<!-- ![Animated Screenshot|512x397,20%](./images/README-generator.gif) -->
+
+<img src="./images/README-generator.gif" alt="Animated Screenshot" style="width: 80%;">
+
 
 ## Contributing: 
 [![Contributor Covenant](https://img.shields.io/badge/Contributor%20Covenant-v2.0%20adopted-ff69b4.svg)](https://www.contributor-covenant.org/version/2/0/code_of_conduct/)
 
 ## Installation: 
-n 
+npm install for "axios", "inquirer" and "util" nodes 
  
-## Usage: 
-n
-
-## Tests: 
-testing
-
 ## Questions: 
-* the-medium-place
-* Email: null
+
+* Email: <zgstowell@gmail.com>
  
 * [GitHub Profile](https://github.com/the-medium-place)
 
