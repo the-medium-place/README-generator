@@ -10,7 +10,6 @@
   "license": "ISC",
   "dependencies": {
     "axios": "^0.18.1",
-    "dotenv": "^8.2.0",
     "inquirer": "^7.1.0",
     "util": "^0.12.2"
   }
