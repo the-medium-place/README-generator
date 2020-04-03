@@ -3,10 +3,14 @@
 const inquirer = require("inquirer");
 const fs = require("fs");
 const axios = require('axios');
+const util = require("util");
 
+const writeFileAsync = util.promisify(fs.writeFile);
+const appendFileAsync = util.promisify(fs.appendFile);
 
-// ask for user info
-inquirer.prompt([
+require('dotenv').config();
+
+const questions = [
     {
         type: "input",
         message: "What is your GitHub User ID?",
@@ -14,7 +18,7 @@ inquirer.prompt([
     },
     {
         type: "input",
-        message: "What is your project Title?",
+        message: "Project Title:",
         name: "title"
     },
     {
@@ -24,76 +28,93 @@ inquirer.prompt([
     },
     {
         type: "input",
-        message: "Any Installation Requirements?",
+        message: "Installation Instructions: ",
         name: "installation"
     },
     {
         type: "input",
-        message: "Usage Stuff?",
+        message: "Instructions for Use: ",
         name: "usage"
     },
     {
         type: "input",
-        message: "Licensing Stuff",
+        message: "Licensing Info (badge): ",
         name: "license"
     },
     {
         type: "input",
-        message: "Contributing Stuff",
+        message: "Contributing Info (Leave BLANK for Contributor Covenant): ",
         name: "contributing"
     },
     {
         type: "input",
-        message: "Tests Stuff",
+        message: "Testing Info:",
         name: "tests"
-    },
-    {
-        type: "input",
-        message: "Questions Stuff",
-        name: "questions"
+    }
+]
+
+const GITHUB_KEY = process.env.GITHUB_KEY;
+
+// ask for user info
+inquirer.prompt(questions).then(response => {
+
+    // destructure response object
+    const { username, title, description, installation, usage, license, contributing, tests } = response;
+
+    // filter contributing response 
+    const contributingFunc = () => {
+
+        if (!contributing) {
+            fs.appendFile("READMEtest.md", `## Contributing: \n[![Contributor Covenant](https://img.shields.io/badge/Contributor%20Covenant-v2.0%20adopted-ff69b4.svg)](https://www.contributor-covenant.org/version/2/0/code_of_conduct/)\n\n`, err => !err ? console.log("contributor convenant badge loaded successfully") : console.log(err));
+        } else {
+            fs.appendFile("READMEtest.md", `## Contributing: \n ${contributing}\n\n`, err => !err ? console.log("contributing info loaded successfully") : console.log(err))
+        }
     }
 
-]).then(response => {
-    console.log(response);
+    // api call for github user info
+    const apiCall = () => {
+        // axios call to github api
+        let queryURL = `https://api.github.com/users/${username}`;
 
-    let queryURL = "https://api.github.com/users/" + response.username;
+        axios.get(queryURL)
+            .then(response => {
 
-    axios.get(queryURL)
-        .then(response => {
+                // user avatar url
+                const { avatar_url, html_url, email } = response.data;
 
-            // user avatar url
-            let userPic = response.data.avatar_url;
+                // append questions heading / username / user email
+                appendFileAsync("READMEtest.md", `## Questions: \n* ${username}\n* Email: ${email}\n \n`)
 
-            console.log(response.data.login);
-            console.log(userPic);
-            fs.appendFile("READMEtest.md", `![user image](${userPic})\n`, err => console.log(err));
+                // append link to user github bio
+                .then(appendFileAsync("READMEtest.md", `* [GitHub Profile](${html_url})\n\n`))
 
-        })
-        .catch(error => {
+                // append user avatar
+                .then(appendFileAsync("READMEtest.md", `![user image](${avatar_url}&s=40)\n\n`))
+                .catch(err => !err ? console.log("api success"): console.log(err))
 
-            console.log(error);
+            })
+            .catch(error => {console.log("STOP HERE:\n", error)
         });
-
-    fs.appendFile("READMEtest.md", `# ${response.title}\\n\\n\\n`, err => console.log(err));
-    fs.appendFile("READMEtest.md", `${response.description}\\n\\n`, err => console.log(err));
-    fs.appendFile("READMEtest.md", `${response.username}\\n\\n`, err => console.log(err));
-    
+    }
 
 
-})
+
+    writeFileAsync("READMEtest.md", `# ${title}\n \n`)
+        .then(appendFileAsync("READMEtest.md", `## License: \n![License: ${license}](https://img.shields.io/badge/License-${license}-green.svg) \n \n`))
+        .then(appendFileAsync("READMEtest.md", `## Description: \n${description} \n \n`))
+        .then(appendFileAsync("READMEtest.md", `## Table of Contents\n* [Installation](#installation)\n* [Usage](#usage)\n* [Contributing](#contributing)\n* [Testing](#tests)\n* [Questions](#questions)\n\n`))
+        .then(appendFileAsync("READMEtest.md", `## Installation: \n${installation} \n \n`))
+        .then(contributingFunc())
+        .then(appendFileAsync("READMEtest.md", `## Usage: \n${usage}\n\n`))
+        .then(appendFileAsync("READMEtest.md", `## Tests: \n${tests}\n\n`))
+        .then(apiCall())
+        .catch(err => !err ? console.log("success!!") : console.log(err));
 
 
-// let apiQueryUrl = "https://api.github.com/users/the-medium-place";
 
-// axios.get('https://api.github.com/users/the-medium-place')
-//     .then(response => {
 
-//         let userPic = response.data.avatar_url;
+}).catch(err => console.log(err))
 
-//     })
-//     .catch(error => {
 
-//         console.log(error);
-//     });
 
 
