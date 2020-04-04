@@ -3,7 +3,6 @@
 ## Description: 
 A command-line application that dynamically generates a README.md from a user's input. The generated file includes a licensing badge and an optional Contributor Covenant badge. 
  
-<!-- ![Animated Screenshot|512x397,20%](./images/README-generator.gif) -->
 
 <img src="./images/README-generator.gif" alt="Animated Screenshot" style="width: 80%;">
 

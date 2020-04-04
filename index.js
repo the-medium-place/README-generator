@@ -17,6 +17,11 @@ const questions = [
     },
     {
         type: "input",
+        message: "What is your E-mail Address?",
+        name: "email"
+    },
+    {
+        type: "input",
         message: "Project Title:",
         name: "title"
     },
@@ -56,15 +61,17 @@ const questions = [
 inquirer.prompt(questions).then(response => {
 
     // destructure response object
-    const { username, title, description, installation, usage, license, contributing, tests } = response;
+    const { username, email, title, description, installation, usage, license, contributing, tests } = response;
 
     // filter contributing response 
     const contributingFunc = () => {
 
         if (!contributing) {
-            fs.appendFile("READMEgenerated.md", `## Contributing: \n[![Contributor Covenant](https://img.shields.io/badge/Contributor%20Covenant-v2.0%20adopted-ff69b4.svg)](https://www.contributor-covenant.org/version/2/0/code_of_conduct/)\n\n`, err => !err ? console.log("contributor convenant badge loaded successfully") : console.log(err));
+            fs.appendFile("READMEgenerated.md", `## Contributing:
+[![Contributor Covenant](https://img.shields.io/badge/Contributor%20Covenant-v2.0%20adopted-ff69b4.svg)](https://www.contributor-covenant.org/version/2/0/code_of_conduct/)\n`, err => console.log(err));
         } else {
-            fs.appendFile("READMEgenerated.md", `## Contributing: \n ${contributing}\n\n`, err => !err ? console.log("contributing info loaded successfully") : console.log(err))
+            fs.appendFile("READMEgenerated.md", `## Contributing:
+${contributing}\n`, err => console.log(err))
         }
     }
 
@@ -77,39 +84,51 @@ inquirer.prompt(questions).then(response => {
             .then(response => {
 
                 // user avatar url
-                const { avatar_url, html_url, email } = response.data;
+                const { avatar_url, html_url } = response.data;
 
                 // append questions heading / username / user email
-                appendFileAsync("READMEgenerated.md", `## Questions: \n* ${username}\n* Email: ${email}\n \n`)
+                appendFileAsync("READMEgenerated.md", `## Questions:
+* GitHub Profile:  [${username}](${html_url})
+* Email: <${email}>
+\n
+![user image](${avatar_url}&s=50)`)
 
-                // append link to user github bio
-                .then(appendFileAsync("READMEgenerated.md", `* [GitHub Profile](${html_url})\n\n`))
-
-                // append user avatar
-                .then(appendFileAsync("READMEgenerated.md", `![user image](${avatar_url}&s=40)\n\n`))
-                .catch(err => !err ? console.log("api success"): console.log(err))
+                    .catch(err => !err ? console.log("api success") : console.log(err))
 
             })
-            .catch(error => {console.log(error)
-        });
+            .catch(error => {
+                console.log(error)
+            });
     }
 
 
-    writeFileAsync("READMEgenerated.md", `# ${title}\n \n`)
-        .then(appendFileAsync("READMEgenerated.md", `![License: ${license}](https://img.shields.io/badge/License-${license}-green.svg) \n \n`))
-        .then(appendFileAsync("READMEgenerated.md", `## Description: \n${description} \n \n`))
-        .then(appendFileAsync("READMEgenerated.md", `## Table of Contents\n* [Installation](#installation)\n* [Usage](#usage)\n* [Contributing](#contributing)\n* [Testing](#tests)\n* [Questions](#questions)\n\n`))
-        .then(appendFileAsync("READMEgenerated.md", `## Installation: \n${installation} \n \n`))
+    writeFileAsync("READMEgenerated.md", `# ${title}
+
+![License: ${license}](https://img.shields.io/badge/License-${license}-green.svg) 
+
+## Description: 
+${description} 
+
+## Table of Contents
+
+* [Installation](#installation)
+* [Usage](#usage)
+* [Testing](#tests)
+* [Contributing](#contributing)
+* [Questions](#questions)
+
+## Installation: 
+${installation}
+
+## Usage: 
+${usage}
+
+## Tests: 
+${tests}\n\n`)
         .then(contributingFunc())
-        .then(appendFileAsync("READMEgenerated.md", `## Usage: \n${usage}\n\n`))
-        .then(appendFileAsync("READMEgenerated.md", `## Tests: \n${tests}\n\n`))
         .then(apiCall())
         .catch(err => console.log(err));
-
-
-
-
-}).catch(err => console.log(err))
+}).catch(err => !err ? console.log("README Successfully Generated") : console.log(err));
 
 
 
